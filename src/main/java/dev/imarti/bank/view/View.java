@@ -1,7 +1,8 @@
 package dev.imarti.bank.view;
 
 public enum View {
-    LOGIN("login.fxml");
+    LOGIN("login.fxml"),
+    REGISTER("register.fxml");
 
     private final String fxml;
 
