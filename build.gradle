@@ -1,9 +1,9 @@
 plugins {
     id "java"
     id "application"
-    id "org.javamodularity.moduleplugin" version "1.8.12"
-    id "org.openjfx.javafxplugin" version "0.0.13"
-    id 'org.beryx.jlink' version '2.25.0'
+    id "org.javamodularity.moduleplugin" version "1.8.15"
+    id "org.openjfx.javafxplugin" version "0.1.0"
+    id 'org.beryx.jlink' version '3.0.1'
 }
 
 group "dev.imarti"
@@ -19,7 +19,7 @@ repositories {
 }
 
 ext {
-    junitVersion = "5.10.2"
+    junitVersion = "5.11.0"
 }
 
 tasks.withType(JavaCompile) {
@@ -32,7 +32,7 @@ javafx {
 }
 
 dependencies {
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.2")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.4.1")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
