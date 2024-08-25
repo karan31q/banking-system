@@ -1,6 +1,8 @@
 package dev.imarti.bank.view;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 import java.io.IOException;
@@ -18,6 +20,8 @@ public class ViewSwitcher {
             return;
         }
         FXMLLoader fxmlLoader = new FXMLLoader(ViewSwitcher.class.getResource(view.getFxml()));
-        scene.setRoot(fxmlLoader.load());
+        Parent root = fxmlLoader.load();
+        Platform.runLater(root::requestFocus);
+        scene.setRoot(root);
     }
 }
