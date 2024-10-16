@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mariadb://10.100.0.5:3306/bank";
+    private static final String URL = "jdbc:mariadb://imarti.cloud:3306/bank";
     private static final String USERNAME = "sky";
     private static final String PASSWORD = "GExvBUJe";
 
