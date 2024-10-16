@@ -14,14 +14,12 @@ public class ViewSwitcher {
         ViewSwitcher.scene = scene;
     }
 
-    public static void switchView(View view) throws IOException {
-        if (scene == null) {
-            System.out.println("No scene was set");
-            return;
-        }
+    public static Object switchView(View view) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(ViewSwitcher.class.getResource(view.getFxml()));
         Parent root = fxmlLoader.load();
         Platform.runLater(root::requestFocus);
         scene.setRoot(root);
+
+        return fxmlLoader.getController();
     }
 }
