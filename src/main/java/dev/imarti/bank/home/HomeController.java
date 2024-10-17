@@ -1,5 +1,6 @@
 package dev.imarti.bank.home;
 
+import dev.imarti.bank.util.FetchUserDetails;
 import dev.imarti.bank.view.View;
 import dev.imarti.bank.view.ViewSwitcher;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import java.io.IOException;
 public class HomeController {
     // private final String alertHeading = "Banking System | Home";
     private String userID;
+    private FetchUserDetails userDetails;
 
     @FXML
     protected Text name;
@@ -19,6 +21,9 @@ public class HomeController {
 
     public void setUserDetails(String userID) {
         this.userID = userID;
+        userDetails = new FetchUserDetails(userID);
+        name.setText(userDetails.getName());
+        balance.setText(String.valueOf(userDetails.getBalance()));
     }
 
     @FXML
