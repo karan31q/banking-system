@@ -14,10 +14,17 @@ import java.sql.*;
 public class RegisterController {
     public String alertHeading = "Banking System | Register";
 
-    public TextField username;
-    public PasswordField password;
-    public TextField name;
-    public TextField email;
+    @FXML
+    protected TextField username;
+
+    @FXML
+    protected PasswordField password;
+
+    @FXML
+    protected TextField name;
+
+    @FXML
+    protected TextField email;
 
     @FXML
     protected void onSignUpButtonClick() {

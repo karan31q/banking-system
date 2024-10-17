@@ -15,8 +15,11 @@ import java.sql.*;
 public class MainController {
     public String alertHeading = "Banking System | Login";
 
-    public TextField username;
-    public PasswordField password;
+    @FXML
+    protected TextField username;
+
+    @FXML
+    protected PasswordField password;
 
     @FXML
     protected void onLoginButtonClick() throws IOException {
