@@ -21,7 +21,7 @@ public class FetchUserDetails {
             preparedStatement.setString(1, userID);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                this.name = resultSet.getString("name");
+                this.name = resultSet.getString("full_name");
                 this.email = resultSet.getString("email");
                 try {
                     String accountsQuery = "SELECT * from accounts where user_id = ?";
