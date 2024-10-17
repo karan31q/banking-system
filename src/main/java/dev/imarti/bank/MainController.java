@@ -1,6 +1,7 @@
 package dev.imarti.bank;
 
 import dev.imarti.bank.db.DBConnection;
+import dev.imarti.bank.home.HomeController;
 import dev.imarti.bank.view.View;
 import dev.imarti.bank.view.ViewSwitcher;
 import javafx.fxml.FXML;
@@ -18,7 +19,7 @@ public class MainController {
     public PasswordField password;
 
     @FXML
-    protected void onLoginButtonClick() {
+    protected void onLoginButtonClick() throws IOException {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle(alertHeading);
         if (username.getText().isEmpty() || password.getText().isEmpty()) {
@@ -46,7 +47,16 @@ public class MainController {
                 alert.setHeaderText(alertHeading);
                 alert.setContentText("Login successful, redirecting to Home Page.");
                 alert.showAndWait();
-                // TODO(Switch to homepage)
+                String userID = result.getString("user_id");
+                String checkAccountExists = "SELECT * FROM accounts WHERE user_id = ?";
+                PreparedStatement cAEPreparedStatement = connection.prepareStatement(checkAccountExists);
+                cAEPreparedStatement.setString(1, result.getString("user_id"));
+                ResultSet cAEResult = cAEPreparedStatement.executeQuery();
+                if (cAEResult.next()) {
+                    HomeController homeController = (HomeController) ViewSwitcher.switchView(View.HOME);
+                    homeController.setUserDetails(userID);
+                }
+                // TODO("add account registration page")
             } else {
                 alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText(alertHeading);

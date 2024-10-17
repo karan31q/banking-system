@@ -11,4 +11,7 @@ module dev.imarti.bank {
 
     exports dev.imarti.bank.register;
     opens dev.imarti.bank.register to javafx.fxml;
+
+    exports dev.imarti.bank.home;
+    opens dev.imarti.bank.home to javafx.fxml;
 }
