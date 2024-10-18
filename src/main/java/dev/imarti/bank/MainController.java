@@ -2,6 +2,7 @@ package dev.imarti.bank;
 
 import dev.imarti.bank.db.DBConnection;
 import dev.imarti.bank.home.HomeController;
+import dev.imarti.bank.register.AccountRegisterController;
 import dev.imarti.bank.view.View;
 import dev.imarti.bank.view.ViewSwitcher;
 import javafx.fxml.FXML;
@@ -58,8 +59,10 @@ public class MainController {
                 if (cAEResult.next()) {
                     HomeController homeController = (HomeController) ViewSwitcher.switchView(View.HOME);
                     homeController.setUserDetails(userID);
+                } else {
+                    AccountRegisterController accountRegisterController = (AccountRegisterController) ViewSwitcher.switchView(View.ACCOUNT_REGISTER);
+                    accountRegisterController.setUserDetails(userID);
                 }
-                // TODO("add account registration page")
             } else {
                 alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText(alertHeading);
