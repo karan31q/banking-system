@@ -52,6 +52,8 @@ public class AccountRegisterController {
             return;
         }
         try (Connection connection = DBConnection.connectDB()) {
+            String query;
+            PreparedStatement preparedStatement;
             if (connection == null) {
                 alert.setAlertType(Alert.AlertType.ERROR);
                 alert.setHeaderText(alertHeading);
@@ -59,19 +61,28 @@ public class AccountRegisterController {
                 alert.show();
                 return;
             }
-            String query = "INSERT INTO accounts (user_id, balance) values (?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            query = "INSERT INTO accounts (user_id, balance) values (?, ?)";
+            preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, userID);
-            preparedStatement.setString(2, initialDeposit.getText());
+            preparedStatement.setDouble(2, Double.parseDouble(initialDeposit.getText()));
             try {
                 int result = preparedStatement.executeUpdate();
                 if (result > 0) {
-                    alert.setAlertType(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(alertHeading);
-                    alert.setContentText("Account successfully registered, Redirecting to home page");
-                    alert.showAndWait();
-                    HomeController homeController = (HomeController) ViewSwitcher.switchView(View.HOME);
-                    homeController.setUserDetails(userID);
+                    query = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setString(1, userDetails.getUserID());
+                    preparedStatement.setString(2, userDetails.getAccountID());
+                    preparedStatement.setDouble(3, Double.parseDouble(initialDeposit.getText()));
+                    preparedStatement.setString(4, "CREDIT");
+                    int transactionResult = preparedStatement.executeUpdate();
+                    if (transactionResult > 0) {
+                        alert.setAlertType(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(alertHeading);
+                        alert.setContentText("Account successfully registered, Redirecting to home page");
+                        alert.showAndWait();
+                        HomeController homeController = (HomeController) ViewSwitcher.switchView(View.HOME);
+                        homeController.setUserDetails(userID);
+                    }
                 } else {
                     alert.setAlertType(Alert.AlertType.ERROR);
                     alert.setHeaderText(alertHeading);
