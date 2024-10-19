@@ -1,5 +1,6 @@
 package dev.imarti.bank.home;
 
+import dev.imarti.bank.account.AccountController;
 import dev.imarti.bank.util.FetchUserDetails;
 import dev.imarti.bank.view.View;
 import dev.imarti.bank.view.ViewSwitcher;
@@ -38,7 +39,8 @@ public class HomeController {
 
     @FXML
     protected void onAccountsButtonClick() throws IOException {
-        // TODO
+        AccountController accountController = (AccountController) ViewSwitcher.switchView(View.ACCOUNT);
+        accountController.setUserDetails(userDetails);
     }
 
     @FXML

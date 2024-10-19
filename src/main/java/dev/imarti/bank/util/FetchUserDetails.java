@@ -1,6 +1,8 @@
 package dev.imarti.bank.util;
 
 import dev.imarti.bank.db.DBConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,7 @@ public class FetchUserDetails {
     public String name;
     public String email;
     public int balance;
+    public int accountID;
 
     public FetchUserDetails(String userID) {
         this.userID = userID;
@@ -30,6 +33,7 @@ public class FetchUserDetails {
                     ResultSet accountsResultSet = accountsPreparedStatement.executeQuery();
                     if (accountsResultSet.next()) {
                         this.balance = accountsResultSet.getInt("balance");
+                        this.accountID = accountsResultSet.getInt("account_id");
                     }
                 } catch (SQLException e) {
                     System.out.println(e.getMessage());
@@ -56,5 +60,31 @@ public class FetchUserDetails {
 
     public int getBalance() {
         return balance;
+    }
+
+    public int getAccountID() {
+        return accountID;
+    }
+
+    public ObservableList<Transactions> getTransactions(String userID) {
+        ObservableList<Transactions> transactionsList = FXCollections.observableArrayList();
+
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT * FROM transactions WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String transactionID = resultSet.getString("transaction_id");
+                Integer transactionAmount = resultSet.getInt("amount");
+                String transactionType = resultSet.getString("type");
+                String transactionDate = resultSet.getString("transaction_date");
+                Transactions transactions = new Transactions(transactionID, transactionAmount, transactionType, transactionDate);
+                transactionsList.add(transactions);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return transactionsList;
     }
 }
