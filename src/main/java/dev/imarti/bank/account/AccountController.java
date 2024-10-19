@@ -1,5 +1,6 @@
 package dev.imarti.bank.account;
 
+import dev.imarti.bank.db.DBConnection;
 import dev.imarti.bank.home.HomeController;
 import dev.imarti.bank.util.FetchUserDetails;
 import dev.imarti.bank.util.Transactions;
@@ -9,10 +10,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.sql.*;
+import java.util.Optional;
 
 public class AccountController{
     public String alertHeading = "Banking System | Account";
@@ -74,11 +78,73 @@ public class AccountController{
 
     @FXML
     protected void onWithdrawalButtonClick() {
-        // TODO
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(alertHeading);
+        dialog.setHeaderText("Withdrawal Window");
+        dialog.setContentText("Enter amount to be withdrawn");
+        Optional<String> amount = dialog.showAndWait();
+        if (amount.isPresent()) {
+            try (Connection connection = DBConnection.connectDB()) {
+                String query;
+                PreparedStatement preparedStatement;
+                query = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setDouble(1, Double.parseDouble(amount.get()));
+                preparedStatement.setString(2, userDetails.getAccountID());
+                int result = preparedStatement.executeUpdate();
+                if (result > 0) {
+                    query = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setString(1, userDetails.getUserID());
+                    preparedStatement.setString(2, userDetails.getAccountID());
+                    preparedStatement.setDouble(3, Double.parseDouble(amount.get()));
+                    preparedStatement.setString(4, "DEBIT");
+                    int transactionResult = preparedStatement.executeUpdate();
+                    if (transactionResult > 0) {
+                        balance.setText(String.valueOf(userDetails.getBalance()));
+                        transactionsList = userDetails.getTransactions(userDetails.getUserID());
+                        transactions.setItems(transactionsList);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     @FXML
     protected void onDepositButtonClick() {
-        // TODO
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(alertHeading);
+        dialog.setHeaderText("Withdrawal Window");
+        dialog.setContentText("Enter amount to be withdrawn");
+        Optional<String> amount = dialog.showAndWait();
+        if (amount.isPresent()) {
+            try (Connection connection = DBConnection.connectDB()) {
+                String query;
+                PreparedStatement preparedStatement;
+                query = "UPDATE accounts SET balance = balance + ? WHERE account_id = ?";
+                preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setDouble(1, Double.parseDouble(amount.get()));
+                preparedStatement.setString(2, userDetails.getAccountID());
+                int result = preparedStatement.executeUpdate();
+                if (result > 0) {
+                    query = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setString(1, userDetails.getUserID());
+                    preparedStatement.setString(2, userDetails.getAccountID());
+                    preparedStatement.setDouble(3, Double.parseDouble(amount.get()));
+                    preparedStatement.setString(4, "CREDIT");
+                    int transactionResult = preparedStatement.executeUpdate();
+                    if (transactionResult > 0) {
+                        balance.setText(String.valueOf(userDetails.getBalance()));
+                        transactionsList = userDetails.getTransactions(userDetails.getUserID());
+                        transactions.setItems(transactionsList);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }
