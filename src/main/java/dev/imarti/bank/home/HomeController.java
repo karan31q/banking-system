@@ -52,9 +52,4 @@ public class HomeController {
     protected void onDepositsButtonClick() throws IOException {
         // TODO
     }
-
-    @FXML
-    protected void onStatementButtonClick() throws IOException {
-        // TODO
-    }
 }
