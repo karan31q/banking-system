@@ -24,6 +24,9 @@ module dev.imarti.bank {
     exports dev.imarti.bank.deposits;
     opens dev.imarti.bank.deposits to javafx.fxml;
 
+    exports dev.imarti.bank.loans;
+    opens dev.imarti.bank.loans to javafx.fxml;
+
     exports dev.imarti.bank.settings;
     opens dev.imarti.bank.settings to javafx.fxml;
 }

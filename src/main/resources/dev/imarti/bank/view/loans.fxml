@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.imarti.bank.loans.LoansController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <opaqueInsets>
+        <Insets />
+    </opaqueInsets>
+    <padding>
+        <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+    </padding>
+    <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="NEVER">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Banking System">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deposits Page">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+    </VBox>
+    <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.columnIndex="7" GridPane.hgrow="ALWAYS">
+        <Text fx:id="name" strokeType="OUTSIDE" strokeWidth="0.0">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Text>
+        <Text onMouseClicked="#onLogoutClick" strokeType="OUTSIDE" strokeWidth="0.0" text="Logout" underline="true">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Text>
+    </HBox>
+    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+        <Button mnemonicParsing="false" onAction="#onBackButtonClick" text="Back" />
+    </VBox>
+    <TableView fx:id="loansSchemesTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3" GridPane.rowIndex="3" GridPane.rowSpan="3">
+        <columns>
+            <TableColumn fx:id="loansSchemesID" prefWidth="75.0" text="Loans ID" />
+            <TableColumn fx:id="loansSchemesAmount" prefWidth="75.0" text="Amount" />
+            <TableColumn fx:id="loansSchemesInterest" prefWidth="75.0" text="Interest" />
+            <TableColumn fx:id="loansSchemesDuration" prefWidth="75.0" text="Duration (in months)" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+    <TableView fx:id="loansTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="3" GridPane.rowSpan="3">
+        <columns>
+            <TableColumn fx:id="loansID" prefWidth="75.0" text="Loans ID" />
+            <TableColumn fx:id="loansDate" prefWidth="75.0" text="Date" />
+            <TableColumn fx:id="loansAmount" prefWidth="75.0" text="Amount" />
+            <TableColumn fx:id="loansInterest" prefWidth="75.0" text="Interest" />
+            <TableColumn fx:id="loansDueDate" prefWidth="75.0" text="Payment Date" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+    <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deposits Schemes">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="8.0" />
+            </VBox.margin>
+        </Text>
+    </VBox>
+    <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="5" GridPane.columnSpan="3" GridPane.rowIndex="2">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Existing Deposits">
+            <font>
+                <Font size="18.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="8.0" />
+            </VBox.margin>
+        </Text>
+    </VBox>
+    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
+        <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please select a loan to disburse to your account.">
+                <font>
+                    <Font size="18.0" />
+                </font>
+                <VBox.margin>
+                    <Insets bottom="8.0" />
+                </VBox.margin>
+            </Text>
+            <Button mnemonicParsing="false" onAction="#onSecureButtonClick" text="Disburse" />
+        </children>
+        <GridPane.margin>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+        </GridPane.margin>
+    </VBox>
+</GridPane>

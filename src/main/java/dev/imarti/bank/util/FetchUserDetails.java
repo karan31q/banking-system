@@ -247,6 +247,29 @@ public class FetchUserDetails {
         return depositsList;
     }
 
+    public ObservableList<Loans> getLoans(String userID) {
+        ObservableList<Loans> loansList = FXCollections.observableArrayList();
+
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT loan_id, loan_date, amount, interest, due_date FROM loans where user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String loanID = resultSet.getString("loan_id");
+                Date loanDate = resultSet.getDate("loan_date");
+                double loanAmount = resultSet.getDouble("amount");
+                float loanInterest = resultSet.getFloat("interest");
+                Date loanDueDate = resultSet.getDate("due_date");
+                Loans loans = new Loans(loanID, loanDate, loanAmount, loanInterest, loanDueDate);
+                loansList.add(loans);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return loansList;
+    }
+
     public String makeDeposit(String userID, String depositID) {
         try (Connection connection = DBConnection.connectDB()) {
             // first fetch deposit scheme info
@@ -302,6 +325,61 @@ public class FetchUserDetails {
         }
     }
 
+    public String takeLoan(String userID, String loanID) {
+        try (Connection connection = DBConnection.connectDB()) {
+            // first fetch deposit scheme info
+            String loanInfo = "SELECT * FROM loans_list WHERE loan_id = ?";
+            PreparedStatement preparedStatementScheme = connection.prepareStatement(loanInfo);
+            preparedStatementScheme.setString(1, loanID);
+            ResultSet resultSetScheme = preparedStatementScheme.executeQuery();
+            if (resultSetScheme.next()) {
+                double loanAmount = resultSetScheme.getDouble("amount");
+                float loanInterest = resultSetScheme.getFloat("interest");
+                int loanDuration = resultSetScheme.getInt("duration");
+
+                Calendar calendar = Calendar.getInstance();
+                Date loanDate = new Date(calendar.getTimeInMillis());
+                calendar.setTime(loanDate);
+                calendar.add(Calendar.MONTH, loanDuration);
+                Date dueDate = new Date(calendar.getTimeInMillis());
+
+                String accountID = getAccountID();
+
+                String query = "INSERT INTO loans (loan_date, user_id, account_id, amount, interest, due_date) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setDate(1, loanDate);
+                preparedStatement.setString(2, userID);
+                preparedStatement.setString(3, accountID);
+                preparedStatement.setDouble(4, loanAmount);
+                preparedStatement.setFloat(5, loanInterest);
+                preparedStatement.setDate(6, dueDate);
+                int result = preparedStatement.executeUpdate();
+                if (result > 0) {
+                    int balance = getBalance();
+                    double updatedBalance = balance + loanAmount;
+
+                    String updateBalance = "UPDATE accounts SET balance = ? WHERE account_id = ?";
+                    PreparedStatement preparedStatementBalance = connection.prepareStatement(updateBalance);
+                    preparedStatementBalance.setDouble(1, updatedBalance);
+                    preparedStatementBalance.setString(2, accountID);
+                    int resultBalance = preparedStatementBalance.executeUpdate();
+                    if (resultBalance > 0) {
+                        return "loan successful";
+                    } else {
+                        return "loan not successful";
+                    }
+                } else {
+                    return "loan not successful";
+                }
+            } else {
+                return "loan not successful";
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return "some error occurred";
+        }
+    }
+
     public ObservableList<DepositsSchemes> getDepositsSchemes() {
         ObservableList<DepositsSchemes> depositsSchemesList = FXCollections.observableArrayList();
 
@@ -320,5 +398,26 @@ public class FetchUserDetails {
             System.out.println(e.getMessage());
         }
         return depositsSchemesList;
+    }
+
+
+    public ObservableList<LoansSchemes> getLoanSchemes() {
+        ObservableList<LoansSchemes> loansSchemesList = FXCollections.observableArrayList();
+
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT * FROM loans_list";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String loanID = resultSet.getString("loan_id");
+                double loanAmount = resultSet.getDouble("amount");
+                float loanInterest = resultSet.getFloat("interest");
+                float loanDuration = resultSet.getFloat("duration");
+                loansSchemesList.add(new LoansSchemes(loanID, loanAmount, loanInterest, loanDuration));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return loansSchemesList;
     }
 }

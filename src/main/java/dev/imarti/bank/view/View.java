@@ -7,6 +7,7 @@ public enum View {
     HOME("home.fxml"),
     ACCOUNT("account.fxml"),
     DEPOSITS("deposits.fxml"),
+    LOANS("loans.fxml"),
     SETTINGS("settings.fxml");
 
     private final String fxml;
