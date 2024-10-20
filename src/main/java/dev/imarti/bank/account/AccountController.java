@@ -8,6 +8,7 @@ import dev.imarti.bank.view.View;
 import dev.imarti.bank.view.ViewSwitcher;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
@@ -87,24 +88,60 @@ public class AccountController{
             try (Connection connection = DBConnection.connectDB()) {
                 String query;
                 PreparedStatement preparedStatement;
-                query = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
+                query = "SELECT balance FROM accounts WHERE account_id = ?";
                 preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setDouble(1, Double.parseDouble(amount.get()));
-                preparedStatement.setString(2, userDetails.getAccountID());
-                int result = preparedStatement.executeUpdate();
-                if (result > 0) {
-                    query = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
-                    preparedStatement = connection.prepareStatement(query);
-                    preparedStatement.setString(1, userDetails.getUserID());
-                    preparedStatement.setString(2, userDetails.getAccountID());
-                    preparedStatement.setDouble(3, Double.parseDouble(amount.get()));
-                    preparedStatement.setString(4, "DEBIT");
-                    int transactionResult = preparedStatement.executeUpdate();
-                    if (transactionResult > 0) {
-                        balance.setText(String.valueOf(userDetails.getBalance()));
-                        transactionsList = userDetails.getTransactions(userDetails.getUserID());
-                        transactions.setItems(transactionsList);
+                preparedStatement.setString(1, userDetails.getAccountID());
+                ResultSet resultSet = preparedStatement.executeQuery();
+                if (resultSet.next()) {
+                    if (resultSet.getDouble("balance") < Double.parseDouble(amount.get())) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle(alertHeading);
+                        alert.setHeaderText("Transaction Failed");
+                        alert.setContentText("Not enough balance.");
+                        alert.showAndWait();
+                    } else {
+                        query = "UPDATE accounts SET balance = balance - ? WHERE account_id = ?";
+                        preparedStatement = connection.prepareStatement(query);
+                        preparedStatement.setDouble(1, Double.parseDouble(amount.get()));
+                        preparedStatement.setString(2, userDetails.getAccountID());
+                        int result = preparedStatement.executeUpdate();
+                        if (result > 0) {
+                            query = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
+                            preparedStatement = connection.prepareStatement(query);
+                            preparedStatement.setString(1, userDetails.getUserID());
+                            preparedStatement.setString(2, userDetails.getAccountID());
+                            preparedStatement.setDouble(3, Double.parseDouble(amount.get()));
+                            preparedStatement.setString(4, "DEBIT");
+                            int transactionResult = preparedStatement.executeUpdate();
+                            if (transactionResult > 0) {
+                                balance.setText(String.valueOf(userDetails.getBalance()));
+                                transactionsList = userDetails.getTransactions(userDetails.getUserID());
+                                transactions.setItems(transactionsList);
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle(alertHeading);
+                                alert.setHeaderText("Transaction Successful");
+                                alert.showAndWait();
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.ERROR);
+                                alert.setTitle(alertHeading);
+                                alert.setHeaderText("Transaction Failed");
+                                alert.setContentText("Please try again!");
+                                alert.showAndWait();
+                            }
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle(alertHeading);
+                            alert.setHeaderText("Transaction Failed");
+                            alert.setContentText("Please try again!");
+                            alert.showAndWait();
+                        }
                     }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle(alertHeading);
+                    alert.setHeaderText("Transaction Failed");
+                    alert.setContentText("Please try again!");
+                    alert.showAndWait();
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -140,7 +177,21 @@ public class AccountController{
                         balance.setText(String.valueOf(userDetails.getBalance()));
                         transactionsList = userDetails.getTransactions(userDetails.getUserID());
                         transactions.setItems(transactionsList);
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle(alertHeading);
+                        alert.setHeaderText("Transaction Successful");
+                        alert.showAndWait();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle(alertHeading);
+                        alert.setHeaderText("Transaction Failed");
+                        alert.showAndWait();
                     }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle(alertHeading);
+                    alert.setHeaderText("Transaction Failed");
+                    alert.showAndWait();
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
