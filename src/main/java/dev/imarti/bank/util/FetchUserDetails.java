@@ -309,7 +309,18 @@ public class FetchUserDetails {
                     preparedStatementBalance.setString(2, accountID);
                     int resultBalance = preparedStatementBalance.executeUpdate();
                     if (resultBalance > 0) {
-                        return "deposit successful";
+                        String updateTransaction = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
+                        PreparedStatement preparedStatementTransaction = connection.prepareStatement(updateTransaction);
+                        preparedStatementTransaction.setString(1, userID);
+                        preparedStatementTransaction.setString(2, accountID);
+                        preparedStatementTransaction.setDouble(3, depositAmount);
+                        preparedStatementTransaction.setString(4, "DEBIT");
+                        int transactionResult = preparedStatementTransaction.executeUpdate();
+                        if (transactionResult > 0) {
+                            return "deposit successful";
+                        } else {
+                            return "deposit not successful";
+                        }
                     } else {
                         return "deposit not successful";
                     }
@@ -364,7 +375,18 @@ public class FetchUserDetails {
                     preparedStatementBalance.setString(2, accountID);
                     int resultBalance = preparedStatementBalance.executeUpdate();
                     if (resultBalance > 0) {
-                        return "loan successful";
+                        String updateTransaction = "INSERT INTO transactions (user_id, account_id, amount, type) VALUES (?, ?, ?, ?)";
+                        PreparedStatement preparedStatementTransaction = connection.prepareStatement(updateTransaction);
+                        preparedStatementTransaction.setString(1, userID);
+                        preparedStatementTransaction.setString(2, accountID);
+                        preparedStatementTransaction.setDouble(3, loanAmount);
+                        preparedStatementTransaction.setString(4, "CREDIT");
+                        int transactionResult = preparedStatementTransaction.executeUpdate();
+                        if (transactionResult > 0) {
+                            return "loan successful";
+                        } else {
+                            return "loan not successful";
+                        }
                     } else {
                         return "loan not successful";
                     }
