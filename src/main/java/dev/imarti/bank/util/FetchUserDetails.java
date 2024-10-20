@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class FetchUserDetails {
     public String userID;
@@ -221,5 +222,103 @@ public class FetchUserDetails {
             System.out.println(e.getMessage());
         }
         return transactionsList;
+    }
+
+    public ObservableList<Deposits> getDeposits(String userID) {
+        ObservableList<Deposits> depositsList = FXCollections.observableArrayList();
+
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT deposit_id, deposit_date, amount, interest, due_date FROM deposits where user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String depositID = resultSet.getString("deposit_id");
+                Date depositDate = resultSet.getDate("deposit_date");
+                double depositAmount = resultSet.getDouble("amount");
+                float depositInterest = resultSet.getFloat("interest");
+                Date depositDueDate = resultSet.getDate("due_date");
+                Deposits deposits = new Deposits(depositID, depositDate, depositAmount, depositInterest, depositDueDate);
+                depositsList.add(deposits);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return depositsList;
+    }
+
+    public String makeDeposit(String userID, String depositID) {
+        try (Connection connection = DBConnection.connectDB()) {
+            // first fetch deposit scheme info
+            String depositInfo = "SELECT * FROM deposits_list WHERE deposit_id = ?";
+            PreparedStatement preparedStatementScheme = connection.prepareStatement(depositInfo);
+            preparedStatementScheme.setString(1, depositID);
+            ResultSet resultSetScheme = preparedStatementScheme.executeQuery();
+            if (resultSetScheme.next()) {
+                double depositAmount = resultSetScheme.getDouble("amount");
+                float depositInterest = resultSetScheme.getFloat("interest");
+                int depositMaturity = resultSetScheme.getInt("maturity_months");
+
+                Calendar calendar = Calendar.getInstance();
+                Date depositDate = new Date(calendar.getTimeInMillis());
+                calendar.setTime(depositDate);
+                calendar.add(Calendar.MONTH, depositMaturity);
+                Date dueDate = new Date(calendar.getTimeInMillis());
+
+                String accountID = getAccountID();
+
+                String query = "INSERT INTO deposits (deposit_date, user_id, account_id, amount, interest, due_date) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                preparedStatement.setDate(1, depositDate);
+                preparedStatement.setString(2, userID);
+                preparedStatement.setString(3, accountID);
+                preparedStatement.setDouble(4, depositAmount);
+                preparedStatement.setFloat(5, depositInterest);
+                preparedStatement.setDate(6, dueDate);
+                int result = preparedStatement.executeUpdate();
+                if (result > 0) {
+                    int balance = getBalance();
+                    double updatedBalance = balance - depositAmount;
+
+                    String updateBalance = "UPDATE accounts SET balance = ? WHERE account_id = ?";
+                    PreparedStatement preparedStatementBalance = connection.prepareStatement(updateBalance);
+                    preparedStatementBalance.setDouble(1, updatedBalance);
+                    preparedStatementBalance.setString(2, accountID);
+                    int resultBalance = preparedStatementBalance.executeUpdate();
+                    if (resultBalance > 0) {
+                        return "deposit successful";
+                    } else {
+                        return "deposit not successful";
+                    }
+                } else {
+                    return "deposit not successful";
+                }
+            } else {
+                return "deposit not successful";
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return "some error occurred";
+        }
+    }
+
+    public ObservableList<DepositsSchemes> getDepositsSchemes() {
+        ObservableList<DepositsSchemes> depositsSchemesList = FXCollections.observableArrayList();
+
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT * FROM deposits_list";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String depositID = resultSet.getString("deposit_id");
+                double depositAmount = resultSet.getDouble("amount");
+                float depositInterest = resultSet.getFloat("interest");
+                float depositMaturity = resultSet.getFloat("maturity_months");
+                depositsSchemesList.add(new DepositsSchemes(depositID, depositAmount, depositInterest, depositMaturity));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return depositsSchemesList;
     }
 }

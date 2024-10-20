@@ -6,6 +6,7 @@ public enum View {
     ACCOUNT_REGISTER("register_account.fxml"),
     HOME("home.fxml"),
     ACCOUNT("account.fxml"),
+    DEPOSITS("deposits.fxml"),
     SETTINGS("settings.fxml");
 
     private final String fxml;
