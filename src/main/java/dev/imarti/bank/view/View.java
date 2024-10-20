@@ -5,7 +5,8 @@ public enum View {
     REGISTER("register.fxml"),
     ACCOUNT_REGISTER("register_account.fxml"),
     HOME("home.fxml"),
-    ACCOUNT("account.fxml");
+    ACCOUNT("account.fxml"),
+    SETTINGS("settings.fxml");
 
     private final String fxml;
 

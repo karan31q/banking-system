@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dev.imarti.bank.settings.SettingsController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <opaqueInsets>
+        <Insets />
+    </opaqueInsets>
+    <padding>
+        <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
+    </padding>
+    <VBox prefHeight="200.0" prefWidth="100.0" spacing="4.0" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER">
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Banking System">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Settings Page">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Text>
+    </VBox>
+    <VBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="3">
+        <VBox alignment="CENTER_LEFT">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="name">
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="16.0"/>
+                </font>
+            </Text>
+        </VBox>
+        <VBox alignment="CENTER_LEFT">
+            <Button mnemonicParsing="false" text="Update" onAction="#onNameUpdateButtonClick"/>
+        </VBox>
+    </VBox>
+    <VBox GridPane.columnIndex="3" GridPane.rowIndex="4">
+        <VBox>
+            <VBox.margin>
+                <Insets top="8.0"/>
+            </VBox.margin>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="email">
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="16.0"/>
+                </font>
+            </Text>
+        </VBox>
+        <VBox>
+            <Button mnemonicParsing="false" text="Update" onAction="#onEmailUpdateButtonClick"/>
+        </VBox>
+    </VBox>
+    <VBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="4" GridPane.rowIndex="3">
+        <VBox alignment="CENTER_LEFT">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+            </Text>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" fx:id="username">
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+                <font>
+                    <Font size="16.0"/>
+                </font>
+            </Text>
+        </VBox>
+        <VBox alignment="CENTER_LEFT">
+            <Button mnemonicParsing="false" text="Update" onAction="#onUsernameUpdateButtonClick"/>
+        </VBox>
+    </VBox>
+    <VBox GridPane.columnIndex="4" GridPane.rowIndex="4">
+        <VBox>
+            <VBox.margin>
+                <Insets top="8.0"/>
+            </VBox.margin>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password">
+                <font>
+                    <Font size="18.0"/>
+                </font>
+                <VBox.margin>
+                    <Insets bottom="8.0"/>
+                </VBox.margin>
+            </Text>
+        </VBox>
+        <VBox>
+            <Button mnemonicParsing="false" text="Update" onAction="#onPasswordUpdateButtonClick"/>
+        </VBox>
+    </VBox>
+    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+        <Button mnemonicParsing="false" text="Back" onAction="#onBackButtonClick"/>
+    </VBox>
+</GridPane>

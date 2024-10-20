@@ -4,13 +4,11 @@ import dev.imarti.bank.db.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class FetchUserDetails {
     public String userID;
+    public String username;
     public String name;
     public String email;
     public int balance;
@@ -26,6 +24,66 @@ public class FetchUserDetails {
 
     public String getUserID() {
         return userID;
+    }
+
+    public String setPassword(String password) {
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "UPDATE users SET password = ? WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, password);
+            preparedStatement.setString(2, userID);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
+                getUsername();
+                return "updated";
+            } else {
+                System.out.println(userID + " not found");
+                return "no user";
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "some error";
+        }
+    }
+
+    public String getUsername() {
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT username FROM users WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                this.username = resultSet.getString("username");
+                return this.username;
+            } else {
+                System.out.println(userID + " not found");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return username;
+    }
+
+    public String setUsername(String username) {
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "UPDATE users SET username = ? WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, userID);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
+                getUsername();
+                return "updated";
+            } else {
+                System.out.println(userID + " not found");
+                return "no user";
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return "duplicate username";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "some error";
+        }
     }
 
     public String getName() {
@@ -46,6 +104,26 @@ public class FetchUserDetails {
         return name;
     }
 
+    public String setName(String name) {
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "UPDATE users SET full_name = ? WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, userID);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
+                getUsername();
+                return "updated";
+            } else {
+                System.out.println(userID + " not found");
+                return "no user";
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "some error";
+        }
+    }
+
     public String getEmail() {
         try (Connection connection = DBConnection.connectDB()) {
             String query = "SELECT email FROM users WHERE user_id = ?";
@@ -63,6 +141,28 @@ public class FetchUserDetails {
             System.out.println(e.getMessage());
         }
         return email;
+    }
+
+    public String setEmail(String email) {
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "UPDATE users SET email = ? WHERE user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, userID);
+            int result = preparedStatement.executeUpdate();
+            if (result == 1) {
+                getUsername();
+                return "updated";
+            } else {
+                System.out.println(userID + " not found");
+                return "no user";
+            }
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return "duplicate email";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "some error";
+        }
     }
 
     public int getBalance() {

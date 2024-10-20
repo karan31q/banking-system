@@ -1,7 +1,7 @@
 module dev.imarti.bank {
     requires javafx.controls;
     requires javafx.fxml;
-    requires java.sql;
+    requires org.mariadb.jdbc;
 
     opens dev.imarti.bank to javafx.fxml;
     exports dev.imarti.bank;
@@ -20,4 +20,7 @@ module dev.imarti.bank {
 
     exports dev.imarti.bank.account;
     opens dev.imarti.bank.account to javafx.fxml;
+
+    exports dev.imarti.bank.settings;
+    opens dev.imarti.bank.settings to javafx.fxml;
 }
