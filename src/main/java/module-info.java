@@ -6,6 +6,15 @@ module dev.imarti.bank {
     opens dev.imarti.bank to javafx.fxml;
     exports dev.imarti.bank;
 
+    exports dev.imarti.bank.admin;
+    opens dev.imarti.bank.admin to javafx.fxml;
+
+    exports dev.imarti.bank.admin.transactions;
+    opens dev.imarti.bank.admin.transactions to javafx.fxml;
+
+    exports dev.imarti.bank.admin.util;
+    opens dev.imarti.bank.admin.util to javafx.fxml;
+
     exports dev.imarti.bank.view;
     opens dev.imarti.bank.view to javafx.fxml;
 

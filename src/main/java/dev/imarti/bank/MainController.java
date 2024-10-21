@@ -1,8 +1,10 @@
 package dev.imarti.bank;
 
+import dev.imarti.bank.admin.AdminController;
 import dev.imarti.bank.db.DBConnection;
 import dev.imarti.bank.home.HomeController;
 import dev.imarti.bank.register.AccountRegisterController;
+import dev.imarti.bank.util.FetchUserDetails;
 import dev.imarti.bank.view.View;
 import dev.imarti.bank.view.ViewSwitcher;
 import javafx.fxml.FXML;
@@ -56,7 +58,11 @@ public class MainController {
                 PreparedStatement cAEPreparedStatement = connection.prepareStatement(checkAccountExists);
                 cAEPreparedStatement.setString(1, result.getString("user_id"));
                 ResultSet cAEResult = cAEPreparedStatement.executeQuery();
-                if (cAEResult.next()) {
+                FetchUserDetails userDetails = new FetchUserDetails(userID);
+                if (userDetails.isUserAdmin(userID)) {
+                    AdminController adminController = (AdminController) ViewSwitcher.switchView((View.ADMIN));
+                    adminController.setUserDetails(userID);
+                } else if (cAEResult.next()) {
                     HomeController homeController = (HomeController) ViewSwitcher.switchView(View.HOME);
                     homeController.setUserDetails(userID);
                 } else {

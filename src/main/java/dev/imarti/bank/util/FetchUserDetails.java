@@ -23,7 +23,28 @@ public class FetchUserDetails {
         getAccountID();
     }
 
-    public String getUserID() {
+    public Boolean isUserAdmin(String userID) {
+        try (Connection connection = DBConnection.connectDB()) {
+            String query = "SELECT role FROM users where user_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                if (resultSet.getString("role").equals("ADMIN")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+     public String getUserID() {
         return userID;
     }
 

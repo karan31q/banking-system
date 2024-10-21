@@ -1,6 +1,8 @@
 package dev.imarti.bank.view;
 
 public enum View {
+    ADMIN("admin_home.fxml"),
+    ADMIN_TRANSACTIONS("admin_transactions.fxml"),
     LOGIN("login.fxml"),
     REGISTER("register.fxml"),
     ACCOUNT_REGISTER("register_account.fxml"),
